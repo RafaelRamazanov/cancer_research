@@ -1,0 +1,19 @@
+Данный сервис предназначен для профессионального использования медицинскими специалистами и применяется как инструмент вспомогательной оценки при определении целесообразности выполнения биопсии предстательной железы.
+Результаты, предоставляемые сервисом, имеют информационный характер и не заменяют клинических рекомендаций специалиста.
+
+Используя сервис, медицинский работник:
+• подтверждает, что действует в пределах своей профессиональной компетенции и ответственности
+• осознаёт, что решения о назначении диагностических процедур и вмешательств принимаются на основании комплексной клинической оценки, а не исключительно на основе данных, полученных с использованием сервиса
+• подтверждает, что данные вводятся добровольно и в соответствии с действующим законодательством
+• принимает, что авторы и правообладатели программного продукта не несут ответственности за возможные последствия клинических решений, принятых с его использованием
+
+Все права на программное обеспечение принадлежат авторам. Незаконное копирование, модификация или распространение запрещены и преследуются в соответствии с законодательством Российской Федерации.
+
+This service is intended for use by medical professionals as a support tool when assessing the need for prostate biopsy. The results are informational and do not replace clinical judgment.
+By using the service, the healthcare professional:
+• confirms they act within their competence
+• understands that clinical decisions must be based on full evaluation, not only service data
+• agrees that data entry is voluntary and compliant with the law
+• accepts that the authors are not responsible for medical decisions made using the tool
+
+All software rights are reserved. Unauthorized use, copying, or distribution is prohibited under Russian law.
