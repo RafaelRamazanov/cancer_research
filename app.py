@@ -3,7 +3,7 @@ import pickle
 import pandas as pd
 import datetime
 
-st.image(r"C:\Users\Rafael\cancer_research\logo.png", width=500)
+st.image("logo.png", width=500)
 st.header('ИИ-система поддержки принятия решений при проведении биопсии предстательной железы')
 st.subheader('AI Decision Support for Prostate Biopsy')
 
