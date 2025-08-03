@@ -43,7 +43,7 @@ features = [date_of_birth,
             suspicious_areas,
             volume_of_suspicious_areas]
 
-with open(r'C:\Users\Rafael\cancer_research\model_cancer.pkl', 'rb') as f:
+with open(r'model_cancer.pkl', 'rb') as f:
     clf = pickle.load(f)
 
 prediction = clf.predict_proba(features)[1]
