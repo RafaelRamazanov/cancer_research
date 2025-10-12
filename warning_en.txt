@@ -1,0 +1,8 @@
+This service is intended for use by medical professionals as a support tool when assessing the need for prostate biopsy. The results are informational and do not replace clinical judgment.
+By using the service, the healthcare professional:
+• confirms they act within their competence
+• understands that clinical decisions must be based on full evaluation, not only service data
+• agrees that data entry is voluntary and compliant with the law
+• accepts that the authors are not responsible for medical decisions made using the tool
+
+All software rights are reserved. Unauthorized use, copying, or distribution is prohibited under Russian law.
