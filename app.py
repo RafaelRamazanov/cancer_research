@@ -107,12 +107,12 @@ if language == 'ru':
 
         if prediction >= 80:
             st.error(
-                "Рекомендуется выполнение трансректальной биопсии предстательной железы (Transrectal prostate biopsy is recommended)")
+                "Рекомендуется выполнение трансректальной биопсии предстательной железы")
         elif prediction >= 40:
             st.warning(
-                "Рекомендумется выполнение трансперинеальной фьюжн-биопсии предстательной железы (Fusion-guided transperineal prostate biopsy is recommended)")
+                "Рекомендумется выполнение трансперинеальной фьюжн-биопсии предстательной железы")
         else:
-            st.success("Рекомендуется динамическое наблюдение (Active surveillance is recommended)")
+            st.success("Рекомендуется динамическое наблюдение")
 
     st.divider()
 
