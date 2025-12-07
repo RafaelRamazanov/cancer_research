@@ -13,23 +13,29 @@ def get_input_ru():
     date_of_birth = st.date_input("Дата рождения",
                                   min_value=datetime.date(1900, 1, 1))
     relatives = st.radio("""Наличие рака простаты у ближайших родственников""",
-                        ["Нет", "Да"])
+                        ["Нет", "Да", "Неизвестно"])
     relatives = 1 if relatives == "Да" else 0
 
-    opsa = st.number_input("""оПСА (нг/мл)""")
+    # Добавить расу
+
+    opsa = st.number_input("""Общий ПСА (нг/мл)""")
     phi = st.number_input("""Индекс здоровья простаты""", min_value=0)
 
     date = st.date_input("""Дата МРТ""",
                          min_value=datetime.date(1900, 1, 1))
     pi_rads = st.select_slider("Данные МРТ, PI-RADS", [1, 2, 3, 4, 5])
-    suspicious_areas = st.radio("""Подозрительные очаги при УЗИ""",
+    suspicious_areas = st.radio("""Подозрительные очаги ТРУЗИ/Гистосканирование""",
                                 ["Нет", "Да"])
+
+    # УЗИ может быть неизвестно (подумать) (Неизвестно != нет)
+
     suspicious_areas = 1 if suspicious_areas == "Да" else 0
 
-    volume_of_suspicious_areas = st.number_input("""Обьем подозрительных участков (см3)""")
-    pri = st.radio("""Данные ПРИ (укажите 1 - при наличии подозрительных изменений (уплотнение и др.),
-                             0 - при гомогенной железе без изменений)""",
+    volume_of_suspicious_areas = st.number_input("""Обьем подозрительных участков (см3) ТРУЗИ/Гистосканирование""")
+    pri = st.radio("""Данные ПРИ (укажите 1 - наличие изменений, подозрительных на рак простаты,
+                             0 - отсутствие изменений, подозрительных на рак простаты)""",
                           [0, 1])
+    # Обучить вторую модель без ПРИ
 
     date_of_birth = (pd.to_datetime('today') - pd.to_datetime(date_of_birth)).days
     date = (pd.to_datetime('today') - pd.to_datetime(date)).days
@@ -54,23 +60,22 @@ def get_input_en():
     date_of_birth = st.date_input("Date of birth",
                                   min_value=datetime.date(1900, 1, 1))
     relatives = st.radio("""Positive family history of prostate cancer""",
-                        ["No", "Yes"])
+                        ["No", "Yes", "No information"])
     relatives = 1 if relatives == "Yes" else 0
 
-    opsa = st.number_input("""Total PSA level""")
+    opsa = st.number_input("""Total PSA level (ng/ml)""")
     phi = st.number_input("""Prostate health index""", min_value=0)
 
-    date = st.date_input("""Date of MRI""",
-                         min_value=datetime.date(1900, 1, 1))
+    date = st.date_input("""Date of MRI""", min_value=datetime.date(1900, 1, 1))
     pi_rads = st.select_slider("PI-RADS", [1, 2, 3, 4, 5])
-    suspicious_areas = st.radio("""Suspicious lesions on TRUS""",
+    suspicious_areas = st.radio("""Suspicious lesions TRUS/HistoScanning""",
                                 ["No", "Yes"])
     suspicious_areas = 1 if suspicious_areas == "Yes" else 0
 
-    volume_of_suspicious_areas = st.number_input("""Volume of suspicious prostate lesions on TRUS (cm3)""")
+    volume_of_suspicious_areas = st.number_input("""Volume of suspicious prostate lesions TRUS/HistoScanning (cm3)""")
     pri = st.radio("""DRE findings:
-                      1 - suspicious changes (e.g., induration, nodularity)
-                      0 - normal (homogeneous prostate))""",
+                      1 – presence of findings suspicious for prostate cancer
+                      0 – no findings suspicious for prostate cancer""",
                     [0, 1])
 
     date_of_birth = (pd.to_datetime('today') - pd.to_datetime(date_of_birth)).days
@@ -91,7 +96,8 @@ def get_input_en():
     return features
 
 if language == 'ru':
-    st.header('ИИ-система поддержки принятия решений при проведении биопсии предстательной железы')
+    st.header("""Система поддержки принятия врачебных решений на основе
+                 искусственного интеллекта перед проведением биопсии предстательной железы""")
     features = get_input_ru()
     with open('warning_ru.txt', 'r', encoding="utf8") as f:
         warning = f.read()
@@ -120,7 +126,7 @@ if language == 'ru':
     st.caption("""Контакт для связи: dr.p.arutyunyan@gmail.com""")
 
 else:
-    st.header('AI Decision Support for Prostate Biopsy')
+    st.header('AI Clinical Decision Support System before Prostate Biopsy')
     features = get_input_en()
     with open('warning_en.txt', 'r', encoding="utf8") as f:
         warning = f.read()
