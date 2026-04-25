@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import datetime
+import numpy as np
 from model import Classifier
 
 language = st.sidebar.selectbox('', ['ru', 'en'])
@@ -16,8 +17,6 @@ def get_input_ru():
                         ["Нет", "Да", "Неизвестно"])
     relatives = 1 if relatives == "Да" else 0
 
-    # Добавить расу
-
     opsa = st.number_input("""Общий ПСА (нг/мл)""")
     phi = st.number_input("""Индекс здоровья простаты""", min_value=0)
 
@@ -25,17 +24,27 @@ def get_input_ru():
                          min_value=datetime.date(1900, 1, 1))
     pi_rads = st.select_slider("Данные МРТ, PI-RADS", [1, 2, 3, 4, 5])
     suspicious_areas = st.radio("""Подозрительные очаги ТРУЗИ/Гистосканирование""",
-                                ["Нет", "Да"])
+                                ["Нет", "Да", "Неизвестно"])
 
-    # УЗИ может быть неизвестно (подумать) (Неизвестно != нет)
+    if suspicious_areas == "Да":
+        suspicious_areas = 1
+        volume_of_suspicious_areas = st.number_input("""Обьем подозрительных участков (см3) ТРУЗИ/Гистосканирование""")
+    elif suspicious_areas == "Нет":
+        suspicious_areas = 0
+        volume_of_suspicious_areas = 0
+    else:
+        suspicious_areas = np.nan
+        volume_of_suspicious_areas = np.nan
 
-    suspicious_areas = 1 if suspicious_areas == "Да" else 0
+    pri = st.radio("""Данные ПРИ (Наличие изменений, подозрительных на рак простаты)""",
+                          ["Нет", "Да", "Неизвестно"])
 
-    volume_of_suspicious_areas = st.number_input("""Обьем подозрительных участков (см3) ТРУЗИ/Гистосканирование""")
-    pri = st.radio("""Данные ПРИ (укажите 1 - наличие изменений, подозрительных на рак простаты,
-                             0 - отсутствие изменений, подозрительных на рак простаты)""",
-                          [0, 1])
-    # Обучить вторую модель без ПРИ
+    if pri == "Да":
+        pri = 1
+    elif pri == "Нет":
+        pri = 0
+    else:
+        pri = np.nan
 
     date_of_birth = (pd.to_datetime('today') - pd.to_datetime(date_of_birth)).days
     date = (pd.to_datetime('today') - pd.to_datetime(date)).days
@@ -69,14 +78,26 @@ def get_input_en():
     date = st.date_input("""Date of MRI""", min_value=datetime.date(1900, 1, 1))
     pi_rads = st.select_slider("PI-RADS", [1, 2, 3, 4, 5])
     suspicious_areas = st.radio("""Suspicious lesions TRUS/HistoScanning""",
-                                ["No", "Yes"])
-    suspicious_areas = 1 if suspicious_areas == "Yes" else 0
+                                ["No", "Yes", "No information"])
 
-    volume_of_suspicious_areas = st.number_input("""Volume of suspicious prostate lesions TRUS/HistoScanning (cm3)""")
-    pri = st.radio("""DRE findings:
-                      1 – presence of findings suspicious for prostate cancer
-                      0 – no findings suspicious for prostate cancer""",
-                    [0, 1])
+    if suspicious_areas == "Yes":
+        suspicious_areas = 1
+        volume_of_suspicious_areas = st.number_input("""Volume of suspicious prostate lesions TRUS/HistoScanning (cm3)""")
+    elif suspicious_areas == "No":
+        suspicious_areas = 0
+        volume_of_suspicious_areas = 0
+    else:
+        suspicious_areas = np.nan
+        volume_of_suspicious_areas = np.nan
+
+    pri = st.radio("""DRE findings""",
+                    ["No", "Yes", "No information"])
+    if pri == "Yes":
+        pri = 1
+    elif pri == "No":
+        pri = 0
+    else:
+        pri = np.nan
 
     date_of_birth = (pd.to_datetime('today') - pd.to_datetime(date_of_birth)).days
     date = (pd.to_datetime('today') - pd.to_datetime(date)).days
@@ -96,15 +117,13 @@ def get_input_en():
     return features
 
 if language == 'ru':
-    st.header("""Система поддержки принятия врачебных решений на основе
-                 искусственного интеллекта перед проведением биопсии предстательной железы""")
+    st.header("""Система поддержки принятия врачебных решений на основе искусственного интеллекта перед проведением биопсии предстательной железы""")
     features = get_input_ru()
     with open('warning_ru.txt', 'r', encoding="utf8") as f:
         warning = f.read()
 
     with st.expander("Информация"):
         st.warning(warning)
-
     if st.button('Получить результат'):
         model = Classifier()
         prediction = int(model.predict([features])[0][1] * 100)
